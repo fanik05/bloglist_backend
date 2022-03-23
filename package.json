@@ -1,0 +1,26 @@
+{
+  "name": "bloglist_backend",
+  "version": "1.0.0",
+  "description": "an application showing list of blogs",
+  "main": "index.js",
+  "repository": "https://github.com/fanik05/bloglist_backend",
+  "author": "fanik05",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "engines": {
+    "node": "16.14.x"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mongoose": "^6.2.8"
+  },
+  "devDependencies": {
+    "eslint": "^8.11.0",
+    "nodemon": "^2.0.15"
+  }
+}
