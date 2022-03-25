@@ -8,7 +8,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "prettier": "prettier --write ."
   },
   "engines": {
     "node": "16.14.x"
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "eslint": "^8.11.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "prettier": "2.6.0"
   }
 }
