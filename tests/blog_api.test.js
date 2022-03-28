@@ -11,7 +11,7 @@ beforeEach(async () => {
   await Blog.insertMany(initialBlogs)
 })
 
-describe('bloglist api tests', () => {
+describe('when there is initially some blogs saved', () => {
   test('all blogs are returned as json', async () => {
     const response = await api
       .get('/api/blogs')
@@ -28,51 +28,53 @@ describe('bloglist api tests', () => {
     expect(response.body.id).toBeDefined()
   })
 
-  test('a blog is added', async () => {
-    const blog = {
-      title: 'test blog',
-      author: 'test author',
-      url: 'test url',
-      likes: 100,
-    }
+  describe('adding a new blog', () => {
+    test('a blog is added', async () => {
+      const blog = {
+        title: 'test blog',
+        author: 'test author',
+        url: 'test url',
+        likes: 100,
+      }
 
-    const response = await api.post('/api/blogs').send(blog)
-    expect(response.status).toEqual(201)
-    expect(response.headers['content-type']).toMatch(/json/)
+      const response = await api.post('/api/blogs').send(blog)
+      expect(response.status).toEqual(201)
+      expect(response.headers['content-type']).toMatch(/json/)
 
-    const blogsAtEnd = await blogsInDb()
-    expect(blogsAtEnd.length).toBe(initialBlogs.length + 1)
-  })
+      const blogsAtEnd = await blogsInDb()
+      expect(blogsAtEnd.length).toBe(initialBlogs.length + 1)
+    })
 
-  test('if likes is not defined, it defaults to 0', async () => {
-    const blog = {
-      title: 'test blog',
-      author: 'test author',
-      url: 'test url',
-    }
+    test('if likes is not defined, it defaults to 0', async () => {
+      const blog = {
+        title: 'test blog',
+        author: 'test author',
+        url: 'test url',
+      }
 
-    const response = await api.post('/api/blogs').send(blog)
-    expect(response.body.likes).toEqual(0)
-  })
+      const response = await api.post('/api/blogs').send(blog)
+      expect(response.body.likes).toEqual(0)
+    })
 
-  test('a blog has missing title or url', async () => {
-    let blog = {
-      author: 'test author',
-      url: 'test url',
-      likes: 100,
-    }
+    test('a blog has missing title or url', async () => {
+      let blog = {
+        author: 'test author',
+        url: 'test url',
+        likes: 100,
+      }
 
-    let response = await api.post('/api/blogs').send(blog)
-    expect(response.status).toEqual(400)
+      let response = await api.post('/api/blogs').send(blog)
+      expect(response.status).toEqual(400)
 
-    blog = {
-      title: 'test blog',
-      author: 'test author',
-      likes: 100,
-    }
+      blog = {
+        title: 'test blog',
+        author: 'test author',
+        likes: 100,
+      }
 
-    response = await api.post('/api/blogs').send(blog)
-    expect(response.status).toEqual(400)
+      response = await api.post('/api/blogs').send(blog)
+      expect(response.status).toEqual(400)
+    })
   })
 })
 
@@ -81,9 +83,7 @@ describe('deletion of a blog', () => {
     const blogsAtStart = await blogsInDb()
     const blogToDelete = blogsAtStart[0]
 
-    await api
-      .delete(`/api/blogs/${blogToDelete.id}`)
-      .expect(204)
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
 
     const blogsAtEnd = await blogsInDb()
     expect(blogsAtEnd.length).toBe(blogsAtStart.length - 1)
@@ -92,6 +92,23 @@ describe('deletion of a blog', () => {
     expect(titles).not.toContain(blogToDelete.title)
   })
 })
+
+describe('updating a blog', () => {
+  test('succeeds with status code 200 if id is valid', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    const blogUpdateData = {
+      title: 'updated blog',
+      author: 'updated author',
+      url: 'https://updatedurl.com/',
+      likes: 7,
+    }
+    await api.patch(`/api/blogs/${blogToUpdate.id}`).send(blogUpdateData)
+    const blogsAtEnd = await blogsInDb()
+    const updatedBlog = blogsAtEnd.find(b => b.id === blogToUpdate.id)
+    expect(updatedBlog.title).toEqual(blogUpdateData.title)
+  })
+}, 100000)
 
 afterAll(() => {
   mongoose.connection.close()

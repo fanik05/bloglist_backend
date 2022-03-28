@@ -15,8 +15,8 @@ const getBlogById = async (request, response) => {
 }
 
 const createBlog = async (req, res) => {
-  const blog = new Blog(req.body)
-
+  const { title, author, url, likes } = req.body
+  const blog = new Blog({ title, author, url, likes })
   const savedBlog = await blog.save()
   res.status(201).json(savedBlog)
 }
@@ -26,9 +26,18 @@ const deleteBlogById = async (req, res) => {
   res.status(204).end()
 }
 
+const updateBlogById = async (req, res) => {
+  const note = req.body
+  const updatedNote = await Blog.findByIdAndUpdate(req.params.id, note, {
+    new: true,
+  })
+  res.json(updatedNote)
+}
+
 module.exports = {
   getBlogs,
   getBlogById,
   createBlog,
   deleteBlogById,
+  updateBlogById,
 }
