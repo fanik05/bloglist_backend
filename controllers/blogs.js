@@ -21,8 +21,14 @@ const createBlog = async (req, res) => {
   res.status(201).json(savedBlog)
 }
 
+const deleteBlogById = async (req, res) => {
+  await Blog.findByIdAndRemove(req.params.id)
+  res.status(204).end()
+}
+
 module.exports = {
   getBlogs,
   getBlogById,
   createBlog,
+  deleteBlogById,
 }

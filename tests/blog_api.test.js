@@ -6,16 +6,12 @@ const Blog = require('../models/Blog')
 
 const api = supertest(app)
 
+beforeEach(async () => {
+  await Blog.deleteMany({})
+  await Blog.insertMany(initialBlogs)
+})
+
 describe('bloglist api tests', () => {
-  beforeEach(async () => {
-    await Blog.deleteMany({})
-
-    for (let blog of initialBlogs) {
-      let blogObject = new Blog(blog)
-      await blogObject.save()
-    }
-  })
-
   test('all blogs are returned as json', async () => {
     const response = await api
       .get('/api/blogs')
@@ -78,8 +74,25 @@ describe('bloglist api tests', () => {
     response = await api.post('/api/blogs').send(blog)
     expect(response.status).toEqual(400)
   })
+})
 
-  afterAll(() => {
-    mongoose.connection.close()
+describe('deletion of a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await blogsInDb()
+    expect(blogsAtEnd.length).toBe(blogsAtStart.length - 1)
+
+    const titles = blogsAtEnd.map(r => r.title)
+    expect(titles).not.toContain(blogToDelete.title)
   })
+})
+
+afterAll(() => {
+  mongoose.connection.close()
 })
