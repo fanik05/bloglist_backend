@@ -1,4 +1,5 @@
 const morgan = require('morgan')
+const { error } = require('../utils/logger')
 
 const requestLogger = morgan('tiny')
 
@@ -7,7 +8,7 @@ const unknownEndpoint = (req, res) => {
 }
 
 const errorHandler = (err, req, res, next) => {
-  console.error(err.message)
+  error(err.message)
 
   if (err.name === 'CastError') {
     res.status(400).send({ error: 'malformatted id' })
