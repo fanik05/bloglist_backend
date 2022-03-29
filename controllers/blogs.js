@@ -5,12 +5,12 @@ const getBlogs = async (req, res) => {
   res.json(blogs)
 }
 
-const getBlogById = async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
+const getBlogById = async (req, res) => {
+  const blog = await Blog.findById(req.params.id)
   if (blog) {
-    response.json(blog)
+    res.json(blog)
   } else {
-    response.status(404).end()
+    res.status(404).end()
   }
 }
 
