@@ -9,7 +9,7 @@ const {
   unknownEndpoint,
   errorHandler,
 } = require('./utils/middleware')
-const blogsRouter = require('./routes')
+const { blogsRouter, userRouter } = require('./routes')
 
 info('connecting to', MONGODB_URI)
 
@@ -25,6 +25,7 @@ app.use(express.json())
 app.use(requestLogger)
 
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', userRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
