@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const { initialUsers, usersInDb } = require('./test_helper')
 const app = require('../app')
 const User = require('../models/User')
-const res = require('express/lib/response')
 
 const api = supertest(app)
 
