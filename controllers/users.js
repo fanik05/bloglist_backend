@@ -9,11 +9,8 @@ const createUser = async (req, res) => {
     return res.status(400).json({ error: 'username must be unique' })
   }
 
-  if (!/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password)) {
-    return res.status(400).json({
-      error:
-        'password must be at least 8 characters long and contain at least one number, one uppercase and one lowercase letter and one special character',
-    })
+  if (!password || password.length < 3) {
+    return res.status(400).json({ error: 'password is missing or invalid' })
   }
 
   const saltRounds = 10
