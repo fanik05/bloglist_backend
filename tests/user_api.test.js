@@ -11,6 +11,17 @@ beforeEach(async () => {
   await User.insertMany(initialUsers)
 })
 
+describe('when there is initially some users saved', () => {
+  test('all users are returned as json', async () => {
+    const response = await api
+      .get('/api/users')
+      .set('Accept', 'application/json')
+    expect(response.headers['content-type']).toMatch(/json/)
+    expect(response.status).toEqual(200)
+    expect(response.body.length).toEqual(initialUsers.length)
+  })
+})
+
 describe('During invalid add user operation', () => {
   test('invalid users are not added', async () => {
     const usersAtStart = await usersInDb()
