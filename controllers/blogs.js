@@ -21,8 +21,7 @@ const getBlogById = async (req, res) => {
 
 const createBlog = async (req, res) => {
   const { title, author, url, likes } = req.body
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
-  const user = await User.findById(decodedToken.id)
+  const user = await User.findById(req.user.id)
   const blog = new Blog({ title, author, url, likes, user: user._id })
   const savedBlog = await blog.save()
   user.blogs = user.blogs.concat(savedBlog._id)
@@ -31,11 +30,12 @@ const createBlog = async (req, res) => {
 }
 
 const deleteBlogById = async (req, res) => {
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
   const blog = await Blog.findById(req.params.id)
-  if (blog.user.toString() === decodedToken.id) {
+  if (blog.user.toString() === req.user.id) {
     await Blog.findByIdAndRemove(req.params.id)
     res.status(204).end()
+  } else {
+    res.status(404).end()
   }
 }
 

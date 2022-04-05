@@ -9,6 +9,7 @@ const {
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
+  userExtractor,
 } = require('./utils/middleware')
 const { blogsRouter, userRouter, loginRouter } = require('./routes')
 
@@ -26,7 +27,7 @@ app.use(express.json())
 app.use(requestLogger)
 app.use(tokenExtractor)
 
-app.use('/api/blogs', blogsRouter)
+app.use('/api/blogs', userExtractor, blogsRouter)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 

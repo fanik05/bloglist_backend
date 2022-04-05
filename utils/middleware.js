@@ -1,4 +1,5 @@
 const morgan = require('morgan')
+const jwt = require('jsonwebtoken')
 const { error } = require('../utils/logger')
 
 const requestLogger = morgan('tiny')
@@ -33,9 +34,15 @@ const tokenExtractor = (req, res, next) => {
   next()
 }
 
+const userExtractor = (req, res, next) => {
+  req.user = jwt.verify(req.token, process.env.SECRET)
+  next()
+}
+
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
+  userExtractor,
 }
