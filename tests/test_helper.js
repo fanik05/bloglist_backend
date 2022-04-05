@@ -64,7 +64,7 @@ const initialUsers = [
     username: 'root-test',
     name: 'SuperTestuser',
     passwordHash:
-      '$2b$10$Q/rutoDAcNI/PB1fRp5Jg.nzSSiikBzJvfiAS.9LRxQyjSAssegLC',
+      '$2a$10$u5FAYXkDDH8DKr4adeMsCeecjNgb4V2zO9xyaXHpk0swx/aL72xlC',
     blogs: [
       '5a422a851b54a676234d17f7',
       '5a422aa71b54a676234d17f8',
@@ -76,7 +76,7 @@ const initialUsers = [
     username: 'admin-test',
     name: 'AdminTestuser',
     passwordHash:
-      '$2b$10$Q/rutoDAcNI/PB1fRp5Jg.nzSSiikBzJvfiAS.9LRxQyjSAssegLC',
+      '$2a$10$u5FAYXkDDH8DKr4adeMsCeecjNgb4V2zO9xyaXHpk0swx/aL72xlC',
     blogs: [
       '5a422b3a1b54a676234d17f9',
       '5a422b891b54a676234d17fa',

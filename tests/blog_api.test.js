@@ -1,14 +1,21 @@
-const supertest = require('supertest')
+const { agent: supertest } = require('supertest')
 const mongoose = require('mongoose')
-const { initialBlogs, blogsInDb } = require('./test_helper')
+const { initialBlogs, initialUsers, blogsInDb } = require('./test_helper')
 const app = require('../app')
 const Blog = require('../models/Blog')
+const User = require('../models/User')
 
 const api = supertest(app)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(initialBlogs)
+  await User.deleteMany({})
+  await User.insertMany(initialUsers)
+  const response = await api
+    .post('/api/login')
+    .send({ username: 'root-test', password: 'Abc123#' })
+  api.auth(response.body.token, { type: 'bearer' })
 })
 
 describe('when there is initially some blogs saved', () => {

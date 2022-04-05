@@ -30,7 +30,7 @@ const createBlog = async (req, res) => {
 
 const deleteBlogById = async (req, res) => {
   const blog = await Blog.findById(req.params.id)
-  if (blog.user.toString() === req.user.id) {
+  if (blog && (blog.user.toString() === req.user.id)) {
     await Blog.findByIdAndRemove(req.params.id)
     res.status(204).end()
   } else {
